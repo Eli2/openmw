@@ -1,0 +1,12 @@
+[submodule "extern-git/OpenSceneGraph"]
+	path = extern-git/OpenSceneGraph
+	url = git@github.com:Eli2/OpenSceneGraph.git
+	branch = eli2-openmw-static
+[submodule "extern-git/bullet3"]
+	path = extern-git/bullet3
+	url = git@github.com:Eli2/bullet3.git
+	branch = eli2-openmw-static
+[submodule "extern-git/mygui"]
+	path = extern-git/mygui
+	url = git@github.com:Eli2/mygui.git
+	branch = eli2-openmw-static

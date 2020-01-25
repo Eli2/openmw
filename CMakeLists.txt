@@ -106,6 +106,10 @@ option(SDL2_STATIC "Link static build of SDL into the binaries" FALSE)
 option(OSG_STATIC "Link static build of OpenSceneGraph into the binaries" FALSE)
 option(QT_STATIC "Link static build of QT into the binaries" FALSE)
 
+option(OPENMW_USE_SYSTEM_OSG "Use system provided OpenSceneGraph libraries" ON)
+option(OPENMW_USE_SYSTEM_BULLET "Use system provided bullet physics library" ON)
+option(OPENMW_USE_SYSTEM_MYGUI "Use system provided mygui library" ON)
+
 option(OPENMW_UNITY_BUILD "Use fewer compilation units to speed up compile time" FALSE)
 option(OPENMW_LTO_BUILD "Build OpenMW with Link-Time Optimization (Needs ~2GB of RAM)" OFF)
 
@@ -262,6 +266,7 @@ if(NOT HAVE_STDINT_H)
 endif()
 
 
+if(OPENMW_USE_SYSTEM_OSG) # TODO indent
 find_package(OpenSceneGraph 3.3.4 REQUIRED osgDB osgViewer osgText osgGA osgParticle osgUtil osgFX osgShadow osgAnimation)
 include_directories(SYSTEM ${OPENSCENEGRAPH_INCLUDE_DIRS})
 
@@ -291,6 +296,12 @@ if(OSG_STATIC)
     find_package(OSGPlugins REQUIRED COMPONENTS ${USED_OSG_PLUGINS})
     list(APPEND OPENSCENEGRAPH_LIBRARIES ${OSGPlugins_LIBRARIES})
 endif()
+else() # TODO end indent
+    include_directories(SYSTEM
+        ${CMAKE_SOURCE_DIR}/extern-git/OpenSceneGraph/include
+        ${CMAKE_BINARY_DIR}/extern-git/OpenSceneGraph/include
+    )
+endif()
 
 set(BOOST_COMPONENTS system filesystem program_options iostreams)
 if(WIN32)
@@ -312,18 +323,33 @@ endif()
 set(Boost_NO_BOOST_CMAKE ON)
 
 find_package(Boost 1.6.2 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-find_package(MyGUI 3.2.2 REQUIRED)
 find_package(SDL2 2.0.9 REQUIRED)
+
 find_package(OpenAL REQUIRED)
-find_package(Bullet ${REQUIRED_BULLET_VERSION} REQUIRED COMPONENTS BulletCollision LinearMath)
+
+if(OPENMW_USE_SYSTEM_BULLET)
+    find_package(Bullet ${REQUIRED_BULLET_VERSION} REQUIRED COMPONENTS BulletCollision LinearMath)
+    include_directories(SYSTEM ${Bullet_INCLUDE_DIRS})
+else()
+    include_directories(SYSTEM
+        ${CMAKE_SOURCE_DIR}/extern-git/bullet3/src
+    )
+endif()
+
+if(OPENMW_USE_SYSTEM_MYGUI)
+    find_package(MyGUI 3.2.2 REQUIRED)
+    include_directories(SYSTEM ${MyGUI_INCLUDE_DIRS})
+else()
+    include_directories(SYSTEM
+        ${CMAKE_SOURCE_DIR}/extern-git/mygui/MyGUIEngine/include
+    )
+endif()
 
 include_directories("."
     SYSTEM
     ${SDL2_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
-    ${MyGUI_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIR}
-    ${BULLET_INCLUDE_DIRS}
 )
 
 link_directories(${SDL2_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})
@@ -442,6 +468,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID STREQUAL Clang)
 elseif (MSVC)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /FORCE:MULTIPLE")
 endif (CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+
+
+add_subdirectory("extern-git")
 
 # Extern
 set(RECASTNAVIGATION_STATIC ON CACHE BOOL "Build recastnavigation static libraries")

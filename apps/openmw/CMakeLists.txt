@@ -122,26 +122,47 @@ include_directories(
 )
 
 target_link_libraries(openmw
-    ${OSG_LIBRARIES}
-    ${OSGPARTICLE_LIBRARIES}
-    ${OSGUTIL_LIBRARIES}
-    ${OSGDB_LIBRARIES}
-    ${OSGVIEWER_LIBRARIES}
-    ${OSGGA_LIBRARIES}
-    ${OSGSHADOW_LIBRARIES}
+    OpenThreads
+    osg
+    osgUtil
+    osgParticle
+    osgDB
+    osgViewer
+    osgGA
+    osgShadow
+    
+    LinearMath
+    BulletCollision
+    
+    MyGUIEngine
+    
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_THREAD_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     ${OPENAL_LIBRARY}
     ${FFmpeg_LIBRARIES}
-    ${MyGUI_LIBRARIES}
     ${SDL2_LIBRARY}
     ${RecastNavigation_LIBRARIES}
     "osg-ffmpeg-videoplayer"
     "oics"
     components
 )
+
+if(NOT OPENMW_USE_SYSTEM_OSG)
+    target_link_libraries(openmw
+        -Wl,--whole-archive
+        osgdb_bmp
+        osgdb_dds
+        osgdb_freetype
+        osgdb_jpeg
+        osgdb_osg
+        osgdb_png
+        osgdb_tga
+        -Wl,--no-whole-archive
+    )
+endif()
+
 
 if (ANDROID)
     set (OSG_PLUGINS

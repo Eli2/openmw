@@ -215,18 +215,34 @@ if(APPLE)
 endif(APPLE)
 
 target_link_libraries(openmw-cs
-    ${OSG_LIBRARIES}
-    ${OSGTEXT_LIBRARIES}
-    ${OSGUTIL_LIBRARIES}
-    ${OSGVIEWER_LIBRARIES}
-    ${OSGGA_LIBRARIES}
-    ${OSGFX_LIBRARIES}
+    OpenThreads
+    osg
+    osgUtil
+    osgDB
+    osgFX
+    osgGA
+    osgText
+    osgViewer
     ${EXTERN_OSGQT_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     components
 )
+
+if(NOT OPENMW_USE_PLATFORM_OSG)
+    target_link_libraries(openmw-cs
+        -Wl,--whole-archive
+        osgdb_bmp
+        osgdb_dds
+        osgdb_freetype
+        osgdb_jpeg
+        osgdb_osg
+        osgdb_png
+        osgdb_tga
+        -Wl,--no-whole-archive
+    )
+endif()
 
 target_link_libraries(openmw-cs Qt5::Widgets Qt5::Core Qt5::Network Qt5::OpenGL)
 
