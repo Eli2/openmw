@@ -212,7 +212,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     endif()
 endif ()
 
-include_directories(${Bullet_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(components STATIC ${COMPONENT_FILES} ${MOC_SRCS} ${ESM_UI_HDR})
 
@@ -221,20 +221,24 @@ target_link_libraries(components
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     ${Boost_IOSTREAMS_LIBRARY}
-    ${OSG_LIBRARIES}
-    ${OPENTHREADS_LIBRARIES}
-    ${OSGPARTICLE_LIBRARIES}
-    ${OSGUTIL_LIBRARIES}
-    ${OSGDB_LIBRARIES}
-    ${OSGVIEWER_LIBRARIES}
-    ${OSGTEXT_LIBRARIES}
-    ${OSGGA_LIBRARIES}
-    ${OSGSHADOW_LIBRARIES}
-    ${OSGANIMATION_LIBRARIES}
-    ${Bullet_LIBRARIES}
+    OpenThreads
+    osg
+    osgUtil
+    osgParticle
+    osgDB
+    osgViewer
+    osgText
+    osgGA
+    osgShadow
+    osgAnimation
+    
+    LinearMath
+    BulletCollision
+    
+    MyGUIEngine
+    
     ${SDL2_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
-    ${MyGUI_LIBRARIES}
     ${BSAOPTHASH_LIBRARIES}
     RecastNavigation::DebugUtils
     RecastNavigation::Detour
