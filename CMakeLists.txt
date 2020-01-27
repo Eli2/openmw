@@ -525,6 +525,7 @@ add_subdirectory("extern-git")
 # Extern
 set(RECASTNAVIGATION_STATIC ON CACHE BOOL "Build recastnavigation static libraries")
 
+add_subdirectory(extern/gamemode)
 add_subdirectory (extern/recastnavigation EXCLUDE_FROM_ALL)
 add_subdirectory (extern/osg-ffmpeg-videoplayer)
 add_subdirectory (extern/oics)

@@ -7,6 +7,8 @@
 
 #include <boost/filesystem/fstream.hpp>
 
+#include <extern/gamemode/gamemode_client.h>
+
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
@@ -836,6 +838,8 @@ void OMW::Engine::go()
     Settings::Manager settings;
     std::string settingspath;
     settingspath = loadSettings (settings);
+	
+	GameModeScope gameModeScope;
 
     MWClass::registerClasses();
 

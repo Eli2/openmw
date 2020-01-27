@@ -136,6 +136,8 @@ target_link_libraries(openmw
     
     MyGUIEngine
     
+    gamemode_client
+    
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_THREAD_LIBRARY}
     ${Boost_FILESYSTEM_LIBRARY}
