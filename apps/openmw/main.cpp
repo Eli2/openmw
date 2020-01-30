@@ -250,6 +250,7 @@ int runApplication(int argc, char *argv[])
     setenv("OSG_GL_TEXTURE_STORAGE", "OFF", 0);
 #endif
 
+	{
     Files::ConfigurationManager cfgMgr;
     std::unique_ptr<OMW::Engine> engine;
     engine.reset(new OMW::Engine(cfgMgr));
@@ -259,6 +260,9 @@ int runApplication(int argc, char *argv[])
         engine->go();
     }
 
+	}
+	
+	exitCleanup();
     return 0;
 }
 

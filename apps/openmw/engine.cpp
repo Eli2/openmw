@@ -851,3 +851,8 @@ void OMW::Engine::setRandomSeed(unsigned int seed)
 {
     mRandomSeed = seed;
 }
+
+void exitCleanup() {
+	osgDB::Registry::instance()->getObjectCache()->clear();
+	osgDB::Registry::instance(true);
+}
