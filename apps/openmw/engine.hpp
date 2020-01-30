@@ -206,4 +206,6 @@ namespace OMW
     };
 }
 
+void exitCleanup();
+
 #endif /* ENGINE_H */

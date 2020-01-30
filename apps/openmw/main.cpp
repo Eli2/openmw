@@ -279,6 +279,7 @@ int runApplication(int argc, char *argv[])
     setenv("OSG_GL_TEXTURE_STORAGE", "OFF", 0);
 #endif
 
+    { // TODO indent
     osg::setNotifyHandler(new OSGLogHandler());
     Files::ConfigurationManager cfgMgr;
     std::unique_ptr<OMW::Engine> engine;
@@ -289,6 +290,9 @@ int runApplication(int argc, char *argv[])
         engine->go();
     }
 
+    }
+    
+    exitCleanup();
     return 0;
 }
 
