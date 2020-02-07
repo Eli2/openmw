@@ -113,6 +113,9 @@ option(OPENMW_USE_SYSTEM_MYGUI "Use system provided mygui library" ON)
 option(OPENMW_UNITY_BUILD "Use fewer compilation units to speed up compile time" FALSE)
 option(OPENMW_LTO_BUILD "Build OpenMW with Link-Time Optimization (Needs ~2GB of RAM)" OFF)
 
+set(OPENMW_PGO_BUILD "Disable" CACHE STRING "Build OpenMW with Profile-guided optimization")
+set_property(CACHE OPENMW_PGO_BUILD PROPERTY STRINGS "Disable" "Generate" "Use")
+
 # what is necessary to build documentation
 IF( BUILD_DOCS )
     # Builds the documentation.
@@ -442,6 +445,24 @@ if(OPENMW_LTO_BUILD)
     endif()
 endif()
 
+if(NOT OPENMW_PGO_BUILD STREQUAL "Disable")
+    
+    set(OPENMW_PGO_DATA_DIR "${CMAKE_BINARY_DIR}/pgo")
+    message(STATUS "PGO enabled: ${OPENMW_PGO_DATA_DIR}")
+    
+    if(OPENMW_PGO_BUILD STREQUAL "Generate")
+        set(PGO_BUILD_FLAGS "-fprofile-dir=${OPENMW_PGO_DATA_DIR} -fprofile-generate -fprofile-update=atomic")
+        message(STATUS "PGO generate")
+    elseif(OPENMW_PGO_BUILD STREQUAL "Use")
+        set(PGO_BUILD_FLAGS "-fprofile-dir=${OPENMW_PGO_DATA_DIR} -fprofile-use -fprofile-correction")
+        message(STATUS "PGO use")
+    else()
+        message(FATAL_ERROR "Unexpected value for OPENMW_PGO_BUILD: ${OPENMW_PGO_BUILD}")
+    endif()
+    
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PGO_BUILD_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${PGO_BUILD_FLAGS}")
+endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID STREQUAL Clang)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wno-unused-parameter -pedantic -Wno-long-long")
