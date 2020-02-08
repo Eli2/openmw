@@ -114,6 +114,8 @@ option(OPENMW_LTO_BUILD "Build OpenMW with Link-Time Optimization (Needs ~2GB of
 set(OPENMW_PGO_BUILD "Disable" CACHE STRING "Build OpenMW with Profile-guided optimization")
 set_property(CACHE OPENMW_PGO_BUILD PROPERTY STRINGS "Disable" "Generate" "Use")
 
+option(OPENMW_NATIVE_BUILD "Build native executables" OFF)
+
 # what is necessary to build documentation
 IF( BUILD_DOCS )
     # Builds the documentation.
@@ -480,6 +482,11 @@ if(NOT OPENMW_PGO_BUILD STREQUAL "Disable")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL GNU OR CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+
+    if(OPENMW_NATIVE_BUILD)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+    endif()
+
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wno-unused-parameter -std=c++14 -pedantic -Wno-long-long")
     add_definitions( -DBOOST_NO_CXX11_SCOPED_ENUMS=ON )
 
