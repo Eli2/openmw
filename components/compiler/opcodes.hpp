@@ -305,6 +305,7 @@ namespace Compiler
         const int opcodeRepairedOnMe = 0x200030c;
         const int opcodeRepairedOnMeExplicit = 0x200030d;
         const int opcodeToggleRecastMesh = 0x2000310;
+        const int opcodeToggleFootprints = 0x2099999; // TODO use proper opcode ?!
     }
 
     namespace Sky

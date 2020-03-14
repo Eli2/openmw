@@ -974,6 +974,39 @@ void CharacterController::handleTextKey(const std::string &groupname, const std:
                 stream >> pitch;
             }
         }
+        
+        if(soundgen == "left" || soundgen == "right")
+        {
+            int foot = 0;
+            
+            const osg::Node *node = nullptr;
+            if(soundgen == "left") {
+                node = mAnimation->getNode("Left Foot");
+                foot = 1;
+            } else {
+                node = mAnimation->getNode("Right Foot");
+                foot = 2;
+            }
+            
+            if(node)
+            {
+                osg::NodePathList nodepaths = node->getParentalNodePaths();
+                if(!nodepaths.empty())
+                {
+                    auto mat = osg::computeLocalToWorld(nodepaths[0]);
+                    osg::Vec3f pos = mat.getTrans();
+                    
+                    osg::Quat q2 = mat.getRotate();
+                    osg::Vec4f q = q2.asVec4();
+
+                    double siny_cosp = 2 * (q.w() * q.z() + q.x() * q.y());
+                    double cosy_cosp = 1 - 2 * (q.y() * q.y() + q.z() * q.z());
+                    double yaw = std::atan2(siny_cosp, cosy_cosp);
+                    
+                    MWBase::Environment::get().getWorld()->spawnFootprint(pos, yaw, foot);
+                }
+            }
+        }
 
         std::string sound = mPtr.getClass().getSoundIdFromSndGen(mPtr, soundgen);
         if(!sound.empty())

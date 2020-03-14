@@ -83,6 +83,7 @@ namespace MWRender
     class NavMesh;
     class ActorsPaths;
     class RecastMesh;
+    class Footprints;
 
     class RenderingManager : public MWRender::RenderingInterface
     {
@@ -172,6 +173,8 @@ namespace MWRender
         SkyManager* getSkyManager();
 
         void spawnEffect(const std::string &model, const std::string &texture, const osg::Vec3f &worldPosition, float scale = 1.f, bool isMagicVFX = true);
+        
+        void spawnFootprint(const osg::Vec3f &worldPosition, float angle, int foot);
 
         /// Clear all savegame-specific data
         void clear();
@@ -266,6 +269,7 @@ namespace MWRender
         DetourNavigator::Navigator& mNavigator;
         std::unique_ptr<NavMesh> mNavMesh;
         std::size_t mNavMeshNumber = 0;
+        std::unique_ptr<Footprints> mFootprints;
         std::unique_ptr<ActorsPaths> mActorsPaths;
         std::unique_ptr<RecastMesh> mRecastMesh;
         std::unique_ptr<Pathgrid> mPathgrid;

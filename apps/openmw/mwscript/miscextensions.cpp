@@ -1439,6 +1439,21 @@ namespace MWScript
                     runtime.push(0);
                 }
         };
+        
+                
+        class OpToggleFootprints : public Interpreter::Opcode0
+        {
+            public:
+
+                virtual void execute (Interpreter::Runtime& runtime)
+                {
+                    bool enabled =
+                        MWBase::Environment::get().getWorld()->toggleRenderMode(MWRender::Render_Footprints);
+
+                    runtime.getContext().report (enabled ?
+                        "Footprints Rendering -> On" : "Footprints Rendering -> Off");
+                }
+        };
 
         class OpToggleRecastMesh : public Interpreter::Opcode0
         {
@@ -1560,6 +1575,7 @@ namespace MWScript
             interpreter.installSegment5 (Compiler::Misc::opcodeRepairedOnMe, new OpRepairedOnMe<ImplicitRef>);
             interpreter.installSegment5 (Compiler::Misc::opcodeRepairedOnMeExplicit, new OpRepairedOnMe<ExplicitRef>);
             interpreter.installSegment5 (Compiler::Misc::opcodeToggleRecastMesh, new OpToggleRecastMesh);
+            interpreter.installSegment5 (Compiler::Misc::opcodeToggleFootprints, new OpToggleFootprints);
         }
     }
 }

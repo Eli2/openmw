@@ -3661,6 +3661,11 @@ namespace MWWorld
 
         mRendering->spawnEffect(model, texture, worldPosition, 1.0f, false);
     }
+    
+    void World::spawnFootprint(const osg::Vec3f& worldPosition, float angle, int foot)
+    {
+        mRendering->spawnFootprint(worldPosition, angle, foot);
+    }
 
     void World::spawnEffect(const std::string &model, const std::string &textureOverride, const osg::Vec3f &worldPos, float scale, bool isMagicVFX)
     {

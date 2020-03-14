@@ -58,6 +58,7 @@
 
 #include "sky.hpp"
 #include "effectmanager.hpp"
+#include "footprints.hpp"
 #include "npcanimation.hpp"
 #include "pathgrid.hpp"
 #include "camera.hpp"
@@ -263,6 +264,7 @@ namespace MWRender
         mActorsPaths.reset(new ActorsPaths(mRootNode, Settings::Manager::getBool("enable agents paths render", "Navigator")));
         mRecastMesh.reset(new RecastMesh(mRootNode, Settings::Manager::getBool("enable recast mesh render", "Navigator")));
         mPathgrid.reset(new Pathgrid(mRootNode));
+        mFootprints.reset(new Footprints(sceneRoot, mResourceSystem));
 
         mObjects.reset(new Objects(mResourceSystem, sceneRoot, mUnrefQueue.get()));
 
@@ -590,6 +592,10 @@ namespace MWRender
         else if (mode == Render_RecastMesh)
         {
             return mRecastMesh->toggle();
+        }
+        else if (mode == Render_Footprints)
+        {
+            return mFootprints->toggle();
         }
         return false;
     }
@@ -1109,6 +1115,11 @@ namespace MWRender
     void RenderingManager::spawnEffect(const std::string &model, const std::string &texture, const osg::Vec3f &worldPosition, float scale, bool isMagicVFX)
     {
         mEffectManager->addEffect(model, texture, worldPosition, scale, isMagicVFX);
+    }
+
+    void RenderingManager::spawnFootprint(const osg::Vec3f &worldPosition, float angle, int foot)
+    {
+        mFootprints->spawnFootprint(worldPosition, angle, foot);
     }
 
     void RenderingManager::notifyWorldSpaceChanged()

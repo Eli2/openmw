@@ -14,6 +14,7 @@ namespace MWRender
         Render_NavMesh,
         Render_ActorsPaths,
         Render_RecastMesh,
+        Render_Footprints
     };
 
 }
